@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "staticsitegenerator"
+version = "0.1.0"
+description = "A static site generator takes raw content files (like Markdown and images) and turns them into a static website"
+authors = ["Dalton Dayton <50755420+DaltonDayton@users.noreply.github.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
