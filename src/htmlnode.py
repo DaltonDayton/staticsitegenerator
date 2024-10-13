@@ -1,4 +1,9 @@
 class HTMLNode:
+    tag: str | None
+    value: str | None
+    children: list["HTMLNode"] | None
+    props: dict[str, str] | None
+
     def __init__(
         self,
         tag: str | None = None,

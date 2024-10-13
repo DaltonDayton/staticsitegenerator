@@ -12,6 +12,8 @@ from .textnode import (
 
 
 class TestTextNode(unittest.TestCase):
+
+    # Initialization Tests
     def test_init(self):
         node = TextNode("Sample text", text_type_text)
         self.assertEqual(node.text, "Sample text")
@@ -23,6 +25,7 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(node_with_url.text_type, text_type_link)
         self.assertEqual(node_with_url.url, "http://example.com")
 
+    # Equality Tests
     def test_eq(self):
         node = TextNode("This is a text node", text_type_bold)
         node2 = TextNode("This is a text node", text_type_bold)
@@ -55,6 +58,13 @@ class TestTextNode(unittest.TestCase):
         )
         self.assertEqual(node, node2)
 
+    def test_eq_non_textnode(self):
+        node = TextNode("This is a text node", text_type_bold)
+        integer = 5
+        with self.assertRaises(TypeError):
+            self.assertEqual(node, integer)
+
+    # Representation Tests
     def test_repr(self):
         node = TextNode("This is a text node", text_type_bold)
         self.assertEqual(repr(node), "TextNode(This is a text node, bold, None)")
