@@ -93,5 +93,5 @@ def test_repr():
     )
     assert (
         repr(node)
-        == "Tag: a, Value: Sample link, Children: None, Props: {'href': 'https://www.google.com', 'target': '_blank'}"
+        == "HTMLNode(a, Sample link, children: None, {'href': 'https://www.google.com', 'target': '_blank'})"
     )

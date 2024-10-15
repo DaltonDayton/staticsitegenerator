@@ -11,15 +11,16 @@ def test_init():
     assert node.props == {}
 
 
-def test_init_no_value():
-    with pytest.raises(ValueError):
-        LeafNode("p", None, {})
-
-
 # Property Tests
 def test_to_html():
     node = LeafNode("p", "Sample paragraph", {})
     assert node.to_html() == "<p>Sample paragraph</p>"
+
+
+def test_to_html_no_value():
+    node = LeafNode("p", None, {})
+    with pytest.raises(ValueError):
+        node.to_html()
 
 
 def test_to_html_props():
@@ -44,5 +45,5 @@ def test_repr():
     )
     assert (
         repr(node)
-        == "Tag: a, Value: Sample link, Props: {'href': 'https://www.google.com', 'target': '_blank'}"
+        == "LeafNode(a, Sample link, {'href': 'https://www.google.com', 'target': '_blank'})"
     )
