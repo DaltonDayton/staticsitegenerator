@@ -1,6 +1,11 @@
 import pytest
 
-from src.textnode import TextNode, TextType, text_node_to_html_node
+from src.textnode import (
+    TextNode,
+    TextType,
+    split_nodes_delimiter,
+    text_node_to_html_node,
+)
 
 
 # Initialization Tests
@@ -119,3 +124,57 @@ def test_bold():
         assert html_node.tag == "b"
     if html_node is not None:
         assert html_node.value == "This is bold"
+
+
+def test_split_nodes_delimiter_code():
+    node = TextNode("This is text with a `code block` word", TextType.TEXT)
+    new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+    assert new_nodes == [
+        TextNode("This is text with a ", TextType.TEXT, None),
+        TextNode("code block", TextType.CODE, None),
+        TextNode(" word", TextType.TEXT, None),
+    ]
+
+
+def test_split_nodes_delimiter_bold():
+    node = TextNode("This is text with a **bolded** word", TextType.TEXT)
+    new_nodes = split_nodes_delimiter([node], "**", TextType.CODE)
+    assert new_nodes == [
+        TextNode("This is text with a ", TextType.TEXT, None),
+        TextNode("bolded", TextType.CODE, None),
+        TextNode(" word", TextType.TEXT, None),
+    ]
+
+
+def test_split_nodes_delimiter_italic_underscore():
+    node = TextNode("This is text with an _italicized_ word", TextType.TEXT)
+    new_nodes = split_nodes_delimiter([node], "_", TextType.CODE)
+    assert new_nodes == [
+        TextNode("This is text with an ", TextType.TEXT, None),
+        TextNode("italicized", TextType.CODE, None),
+        TextNode(" word", TextType.TEXT, None),
+    ]
+
+
+def test_split_nodes_delimiter_italic_asterisk():
+    node = TextNode("This is text with an *italicized* word", TextType.TEXT)
+    new_nodes = split_nodes_delimiter([node], "*", TextType.CODE)
+    assert new_nodes == [
+        TextNode("This is text with an ", TextType.TEXT, None),
+        TextNode("italicized", TextType.CODE, None),
+        TextNode(" word", TextType.TEXT, None),
+    ]
+
+
+def test_split_nodes_delimiter_texttype_bold():
+    node = TextNode("bolded text", TextType.BOLD)
+    new_nodes = split_nodes_delimiter([node], "*", TextType.BOLD)
+    assert new_nodes == [
+        TextNode("bolded text", TextType.BOLD, None),
+    ]
+
+
+def test_split_nodes_missing_delimiter():
+    node = TextNode("This is text with a `code block word", TextType.TEXT)
+    with pytest.raises(Exception):
+        split_nodes_delimiter([node], "`", TextType.CODE)
