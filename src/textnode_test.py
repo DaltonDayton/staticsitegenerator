@@ -1,6 +1,6 @@
 import pytest
 
-from src.textnode import TextNode, TextType
+from src.textnode import TextNode, TextType, text_node_to_html_node
 
 
 # Initialization Tests
@@ -86,3 +86,36 @@ def test_repr_with_url_text_type():
         repr(node)
         == "TextNode(This is a text node, TextType.TEXT, https://www.boot.dev)"
     )
+
+
+# text_node_to_html_node Tests
+def test_text():
+    node = TextNode("This is a text node", TextType.TEXT)
+    html_node = text_node_to_html_node(node)
+    if html_node is not None:
+        assert html_node.tag == None
+    if html_node is not None:
+        assert html_node.value == "This is a text node"
+
+
+def test_image():
+    node = TextNode("This is an image", TextType.IMAGE, "https://www.boot.dev")
+    html_node = text_node_to_html_node(node)
+    if html_node is not None:
+        assert html_node.tag == "img"
+    if html_node is not None:
+        assert html_node.value == None
+    if html_node is not None:
+        assert html_node.props == {
+            "src": "https://www.boot.dev",
+            "alt": "This is an image",
+        }
+
+
+def test_bold():
+    node = TextNode("This is bold", TextType.BOLD)
+    html_node = text_node_to_html_node(node)
+    if html_node is not None:
+        assert html_node.tag == "b"
+    if html_node is not None:
+        assert html_node.value == "This is bold"
