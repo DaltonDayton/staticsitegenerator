@@ -9,6 +9,9 @@ from src.inline_markdown import (
 )
 from src.textnode import TextNode, TextType
 
+# Split Nodes Delimiter
+# =====================
+
 
 def test_split_nodes_delimiter_code():
     node = TextNode("This is text with a `code block` word", TextType.TEXT)
@@ -88,6 +91,10 @@ def test_split_nodes_missing_delimiter():
         split_nodes_delimiter([node], "`", TextType.CODE)
 
 
+# Split Nodes Image
+# =================
+
+
 def test_split_nodes_image():
     node = TextNode(
         "This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)",
@@ -134,41 +141,6 @@ def test_split_nodes_image_together():
     ]
 
 
-def test_split_nodes_link():
-    node = TextNode(
-        "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
-        TextType.TEXT,
-    )
-    assert split_nodes_link([node]) == [
-        TextNode("This is text with a link ", TextType.TEXT),
-        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
-        TextNode(" and ", TextType.TEXT),
-        TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
-    ]
-
-
-def test_split_nodes_link_one_at_start():
-    node = TextNode(
-        "[to boot dev](https://www.boot.dev) that's a link",
-        TextType.TEXT,
-    )
-    assert split_nodes_link([node]) == [
-        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
-        TextNode(" that's a link", TextType.TEXT),
-    ]
-
-
-def test_split_nodes_link_one_at_end():
-    node = TextNode(
-        "This is a link [to youtube](https://www.youtube.com/@bootdotdev)",
-        TextType.TEXT,
-    )
-    assert split_nodes_link([node]) == [
-        TextNode("This is a link ", TextType.TEXT),
-        TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
-    ]
-
-
 def test_split_image():
     node = TextNode(
         "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
@@ -206,6 +178,56 @@ def test_split_images():
     ]
 
 
+# Split Nodes Link
+# ================
+
+
+def test_split_nodes_link():
+    node = TextNode(
+        "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+        TextType.TEXT,
+    )
+    assert split_nodes_link([node]) == [
+        TextNode("This is text with a link ", TextType.TEXT),
+        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+        TextNode(" and ", TextType.TEXT),
+        TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
+    ]
+
+
+def test_split_nodes_link_one_at_start():
+    node = TextNode(
+        "[to boot dev](https://www.boot.dev) that's a link",
+        TextType.TEXT,
+    )
+    assert split_nodes_link([node]) == [
+        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+        TextNode(" that's a link", TextType.TEXT),
+    ]
+
+
+def test_split_nodes_link_one_at_end():
+    node = TextNode(
+        "This is a link [to youtube](https://www.youtube.com/@bootdotdev)",
+        TextType.TEXT,
+    )
+    assert split_nodes_link([node]) == [
+        TextNode("This is a link ", TextType.TEXT),
+        TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
+    ]
+
+
+def test_split_nodes_link_together():
+    node = TextNode(
+        "[to boot dev](https://www.boot.dev)[to youtube](https://www.youtube.com/@bootdotdev)",
+        TextType.TEXT,
+    )
+    assert split_nodes_link([node]) == [
+        TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
+        TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
+    ]
+
+
 def test_split_links():
     node = TextNode(
         "This is text with a [link](https://boot.dev) and [another link](https://blog.boot.dev) with text that follows",
@@ -221,6 +243,10 @@ def test_split_links():
     ]
 
 
+# Extract Markdown Images
+# =======================
+
+
 def test_extract_markdown_images_one():
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif)"
     assert extract_markdown_images(text) == [
@@ -234,6 +260,10 @@ def test_extract_markdown_images_two():
         ("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
         ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),
     ]
+
+
+# Extract Markdown Links
+# =======================
 
 
 def test_extract_markdown_links_one():
